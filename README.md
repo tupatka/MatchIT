@@ -1,4 +1,4 @@
-Propozycje fancy nazw:
-MatchBox
-Matches
-MatchIT
+# Propozycje fancy nazw:
+- MatchBox
+- Matches
+- MatchIT
