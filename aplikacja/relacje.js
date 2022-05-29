@@ -1,10 +1,10 @@
 const amqplib = require('amqplib');
-const amqpUrl = process.env.AMQP_URL || 'amqp://localhost:5673';
+const amqpUrl = process.env.AMQP_URL || 'amqp://rabbitmq:5672';
 
 
 async function processMessage(msg) {
     console.log(msg.content.toString(), 'Call email API here');
-    // set last message to msg.content 
+    // set last message to msg.content
 }
 
 (async () => {

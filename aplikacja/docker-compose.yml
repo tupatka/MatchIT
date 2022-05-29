@@ -1,10 +1,22 @@
 version: "3.7"
 services:
+  front:
+    build:
+      context: ./front
+    depends_on:
+      - "rabbitmq"
+    ports:
+      - 8080:8080
+    command: node front.js
+    networks:
+      - rabbitmq_nodejs
+
   rabbitmq:
     image: rabbitmq:3.8-management-alpine
     container_name: 'rabbitmq'
+    expose:
+      - 5672
     ports:
-      - 5673:5672
       - 15673:15672
     volumes:
       - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
@@ -27,6 +39,7 @@ services:
       AMQP_URL: amqp://guest:guest@rabbitmq:5672
     networks:
       - rabbitmq_nodejs
+
 networks:
   rabbitmq_nodejs:
     driver: bridge

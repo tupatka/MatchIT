@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const amqplib = require('amqplib');
-const amqpUrl = process.env.AMQP_URL || 'amqp://localhost:5673';
+const amqpUrl = process.env.AMQP_URL || 'amqp://rabbitmq:5672';
 
 const port = 8080;
 app.use(express.static('public'));
