@@ -8,5 +8,5 @@ Powinien się wyświetlić komunikat że czeka na wiadomości.
 Wtedy na localhost:15673 można się zalogować do RabbitMD, login i hasło - guest guest i obejrzeć działającą kolejkę.
 
 Na localhost:8080 działa frontend.
-Można kliknąć w link przechodzący do strony z matchami albo wysłać coś do kolejki rabbitMQ
-W terminalu widać, że została wysłana jakaś wiadomość.
+Można kliknąć w link przechodzący do strony z matchami -> wyświetlają się tam moje matche pobrane po http od serwera.
+Można też wysłać coś do kolejki rabbitMQ. W terminalu widać wówczas, że została wysłana jakaś wiadomość.

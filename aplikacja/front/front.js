@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const fetch = require('node-fetch');
 const amqplib = require('amqplib');
 const amqpUrl = process.env.AMQP_URL || 'amqp://rabbitmq:5672';
 
@@ -8,6 +9,7 @@ app.use(express.static('public'));
 app.engine('pug', require('pug').__express);
 app.set('view engine', 'pug');
 app.set('views', './views');
+const myId = 1;
 
 app.listen(port, () => {
     console.log(`Listening to port http://localhost:${port}`);
@@ -15,18 +17,21 @@ app.listen(port, () => {
 
 app.get('/', (req, res) => {
     res.render('main');
-    /*
-        tu powinna być:
-        - strona z profilami użytkowników, dla każdego możliwość kliknięcia swipe left/swipe right
-            (dodający event do kolejki, na razie jest przycisk który wysła event do kolejki)
-        - przycisk z przejściem na stronę z matchami
-            (na razie jest sobie link)
-    */
 })
 
+
 app.get('/match', (req, res) => {
-    res.send('match');
+    await fetch(`http://localhost:5000/match/${myId}`).
+        then(res => res.json()).
+        then(data => {
+            res.render('match', { matches: data });
+        }).catch(err => {
+            console.log(err);
+            res.send('Niestety nie udało się znaleźć matchy...')
+        });
 })
+
+
 
 app.get('/send_to_queue', async (req, res) => {
     const connection = await amqplib.connect(amqpUrl, 'heartbeat=60');
