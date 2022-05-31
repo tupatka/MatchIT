@@ -33,8 +33,6 @@ services:
       - "rabbitmq"
     expose:
       - 5000
-    ports:
-      - 5000:5000
     command: sh -c '/bin/wait-for-it.sh rabbitmq:5672 --timeout=30 -- node relacje.js'
     environment:
       NODE_ENV: production

@@ -20,8 +20,8 @@ app.get('/', (req, res) => {
 })
 
 
-app.get('/match', (req, res) => {
-    await fetch(`http://localhost:5000/match/${myId}`).
+app.get('/match', async (req, res) => {
+    await fetch(`http://relacje:5000/match/${myId}`).
         then(res => res.json()).
         then(data => {
             res.render('match', { matches: data });
