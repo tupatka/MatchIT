@@ -15,11 +15,30 @@ app.listen(port, () => {
     console.log(`Listening to port http://localhost:${port}`);
 });
 
-app.get('/', (req, res) => {
-    res.render('main');
+// Trzeba podobnie jak tu utworzyć bazę z modelem users, wrzucić tam przykładowe dane,
+// przesyłać po stronie users przez http do frontu, odbierać po stronie frontu,
+// zmienic puga żeby je wyświetlał na stronie głównej
+// zapakować do osobnego kontenera
+
+
+
+// Front pobiera z relacji użytkowników z którymi nie mamy interakcji.
+// Są to same id, front powinien pobrać z users dane tych użytkowników i je udekorować.
+// Trzeba się zastanowić skąd relacje mają mieć tablicę z wszystkimi id, na razie jest tam zhardcodowana.
+
+app.get('/', async (req, res) => {
+    await fetch(`http://relacje:5000/no-interaction/${myId}`).
+        then(res => res.json()).
+        then(data => {
+            console.log(data);
+            res.render('main', { user_ids: data });
+        }).catch(err => {
+            console.log(err);
+            res.send('Brak użytkowników do wyświetlenia...')
+        });
 })
 
-
+// Też ma pobrac z users i dopisac do id dane uzytkownikow
 app.get('/match', async (req, res) => {
     await fetch(`http://relacje:5000/match/${myId}`).
         then(res => res.json()).
@@ -31,11 +50,10 @@ app.get('/match', async (req, res) => {
         });
 })
 
-
-
-app.get('/send_to_queue', async (req, res) => {
+app.get('/send_to_queue/:id', async (req, res) => {
     const connection = await amqplib.connect(amqpUrl, 'heartbeat=60');
     const channel = await connection.createChannel();
+    const other_user_id = req.params.id;
     try {
         console.log('Publishing');
         const exchange = 'user.relations';
@@ -46,7 +64,8 @@ app.get('/send_to_queue', async (req, res) => {
         await channel.assertQueue(queue, { durable: true });
         await channel.bindQueue(queue, exchange, routingKey);
 
-        const msg = { 'id': Math.floor(Math.random() * 1000), 'email': 'user@domail.com', name: 'firstname lastname' };
+        const msg = { 'id': myId, other_user: other_user_id, type: 'match' };
+
         await channel.publish(exchange, routingKey, Buffer.from(JSON.stringify(msg)));
         console.log('Message published');
     } catch (e) {

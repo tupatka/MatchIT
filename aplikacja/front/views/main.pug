@@ -4,7 +4,16 @@ head
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
   title MatchIT
 div Witamy w API MatchIT!
+p Przegl&aogon;daj u&zdot;ytkownik&oacute;w:
+
+if user_ids
+  for user_id in user_ids
+    h1 User: !{user_id}   
+    form(method="get" action='/send_to_queue/' + user_id)
+      button(type="submit") Dodaj    
+
 p
   a(href='/match') Show me my matches!
 p
   a(href='send_to_queue') Send event to queue
+

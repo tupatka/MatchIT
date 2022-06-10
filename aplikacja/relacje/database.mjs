@@ -32,6 +32,27 @@ const Match = sequelize.define('Match', {
 
 console.log(`Model matches zsynchronizowany pomyslnie`);
 
+const Hate = sequelize.define('Hate', {
+  id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    unique: true,
+    primaryKey: true,
+  },
+  user_1: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
+  user_2: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  }
+}, {
+  tableName: 'Hates'
+});
+
+console.log(`Model Hates zsynchronizowany pomyslnie`);
+
 
 try {
   console.log('Nawiązuję połączenie z bazą...');
@@ -48,4 +69,4 @@ try {
   throw err;
 }
 
-export { sequelize, Match };
+export { sequelize, Match, Hate };
