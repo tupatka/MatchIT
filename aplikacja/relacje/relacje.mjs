@@ -1,7 +1,7 @@
-const amqplib = require('amqplib');
+import amqplib from 'amqplib';
 const amqpUrl = process.env.AMQP_URL || 'amqp://rabbitmq:5672';
 
-const express = require('express');
+import express from 'express';
 const app = express();
 
 const port = 5000;

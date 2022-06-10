@@ -10,7 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "amqplib": "^0.9.1",
-    "express": "^4.18.1"
+    "express": "latest"
   },
   "devDependencies": {},
   "description": ""

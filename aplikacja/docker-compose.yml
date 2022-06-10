@@ -31,7 +31,7 @@ services:
       - "rabbitmq"
     expose:
       - 5000
-    command: sh -c '/bin/wait-for-it.sh rabbitmq:5672 --timeout=30 -- node relacje.js'
+    command: sh -c '/bin/wait-for-it.sh rabbitmq:5672 --timeout=30 -- node relacje.mjs'
     environment:
       NODE_ENV: production
       AMQP_URL: amqp://guest:guest@rabbitmq:5672
