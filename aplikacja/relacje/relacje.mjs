@@ -13,6 +13,7 @@ app.listen(port, () => {
 
 const my_id = 1;
 const all_users = [1, 2, 3, 4, 5, 6];
+//^^ Users.mjs będzie dropować wszystkie id użytkownikóœ
 
 const get_user_1_ids = async (id) => {
     const map = await Match.findAll(

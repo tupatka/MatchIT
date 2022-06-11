@@ -15,36 +15,40 @@ app.listen(port, () => {
     console.log(`Listening to port http://localhost:${port}`);
 });
 
-// Trzeba podobnie jak tu utworzyć bazę z modelem users, wrzucić tam przykładowe dane,
-// przesyłać po stronie users przez http do frontu, odbierać po stronie frontu,
-// zmienic puga żeby je wyświetlał na stronie głównej
-// zapakować do osobnego kontenera
-
-
-
-// Front pobiera z relacji użytkowników z którymi nie mamy interakcji.
-// Są to same id, front powinien pobrać z users dane tych użytkowników i je udekorować.
 // Trzeba się zastanowić skąd relacje mają mieć tablicę z wszystkimi id, na razie jest tam zhardcodowana.
+// Napiszę to^^ jako funkcję udostępnianą przez users.mjs, ale dopiero w następnym commicie, bo czas spanko już
+
+
+const getUsersDetails = async (users) => {
+    var usersDetails = [];
+    for(const id of users){
+        console.log(id);
+        await fetch(`http://users:7070/user-info/${id}`).
+        then(res => res.json()).
+        then(data => usersDetails.push(data));
+    }
+    console.log(usersDetails);
+    return usersDetails;
+}
 
 app.get('/', async (req, res) => {
+
     await fetch(`http://relacje:5000/no-interaction/${myId}`).
         then(res => res.json()).
-        then(data => {
-            console.log(data);
-            res.render('main', { user_ids: data });
-        }).catch(err => {
+        then(data => getUsersDetails(data)).
+        then(data => res.render('main', {usersInfo: data})).
+        catch(err => {
             console.log(err);
-            res.send('Brak użytkowników do wyświetlenia...')
+            res.send("Brak użytkowników do wyświetlenia.");
         });
 })
 
-// Też ma pobrac z users i dopisac do id dane uzytkownikow
 app.get('/match', async (req, res) => {
     await fetch(`http://relacje:5000/match/${myId}`).
         then(res => res.json()).
-        then(data => {
-            res.render('match', { matches: data });
-        }).catch(err => {
+        then (data => getUsersDetails(data)).
+        then(data => res.render('match', {usersInfo: data})).
+        catch(err => {
             console.log(err);
             res.send('Niestety nie udało się znaleźć matchy...')
         });

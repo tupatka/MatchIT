@@ -6,9 +6,10 @@ head
 div Witamy w API MatchIT!
 p Przegl&aogon;daj u&zdot;ytkownik&oacute;w:
 
-if user_ids
-  for user_id in user_ids
-    h1 User: !{user_id}   
+if usersInfo
+  for user in usersInfo
+    h3 !{user.name}, !{user.age} l.
+    p !{user.desc}
     form(method="get" action='/send_to_queue/' + user_id)
       button(type="submit") Dodaj    
 

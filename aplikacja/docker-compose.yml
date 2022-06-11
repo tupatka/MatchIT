@@ -38,6 +38,16 @@ services:
     networks:
       - rabbitmq_nodejs
 
+  users:
+    build:
+      context: ./users
+    expose:
+      - 7070
+    command: node users.mjs
+    networks:
+      - rabbitmq_nodejs
+
+
 networks:
   rabbitmq_nodejs:
     driver: bridge

@@ -4,5 +4,8 @@ head
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
   title MatchIT
 div Tu s&aogon; twoje matche!
-for match in matches
-  Match z użytkownikiem o id: #{match}
+
+if usersInfo
+  for user in usersInfo
+    h3 !{user.name}, !{user.age} l.
+    p !{user.desc}
