@@ -14,8 +14,7 @@ const sequelize = new Sequelize('matchit', 'postgres', 'matchit12345', {
 const Match = sequelize.define('Match', {
   id: {
     type: DataTypes.INTEGER,
-    allowNull: false,
-    unique: true,
+    autoIncrement: true,
     primaryKey: true,
   },
   user_1: {
@@ -35,8 +34,7 @@ console.log(`Model matches zsynchronizowany pomyslnie`);
 const Hate = sequelize.define('Hate', {
   id: {
     type: DataTypes.INTEGER,
-    allowNull: false,
-    unique: true,
+    autoIncrement: true,
     primaryKey: true,
   },
   user_1: {
@@ -61,7 +59,7 @@ try {
   console.log('Udało się.');
 
   console.log('Synchronizuję modele z zawartością bazy...');
-  await sequelize.sync({});
+  await sequelize.sync();
   console.log('Udało się.');
 
 } catch (err) {

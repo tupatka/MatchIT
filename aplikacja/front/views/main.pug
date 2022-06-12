@@ -10,8 +10,10 @@ if usersInfo
   for user in usersInfo
     h3 !{user.name}, !{user.age} l.
     p !{user.desc}
-    form(method="get" action='/send_to_queue/' + user_id)
+    form(method="get" action='/send_to_queue/' + user.id + '/match')
       button(type="submit") Dodaj    
+    form(method="get" action='/send_to_queue/' + user.id + '/hate')
+      button(type="submit") Odrzuć    
 
 p
   a(href='/match') Show me my matches!

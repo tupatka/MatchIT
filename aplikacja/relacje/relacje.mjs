@@ -15,7 +15,7 @@ app.listen(port, () => {
 
 const my_id = 1;
 const all_users = await fetch(`http://users:7070/get-users-ids`).
-then(data => data.json());
+    then(data => data.json());
 
 const get_user_1_ids = async (id) => {
     const map = await Match.findAll(
@@ -67,14 +67,14 @@ app.get('/match/:id', async (req, res) => {
     console.log(await Match.findAll({ raw: true }));
 
     const id = parseInt(req.params.id);
-    // console.log(id);
+    console.log(id);
     let users_that_we_matched = await get_user_1_ids(id);
     let users_that_matched_us = await get_user_2_ids(id);
 
-    // console.log(users_that_we_matched, users_that_matched_us);
+    console.log(users_that_we_matched, users_that_matched_us);
 
     const intersection = users_that_matched_us.filter(value => users_that_we_matched.includes(value));
-    // console.log(intersection);
+    console.log(intersection);
 
     res.send(intersection);
 })
@@ -93,7 +93,7 @@ app.get('/no-interaction/:id', async (req, res) => {
     let users_with_no_iteraction = all_users.filter(value => !users_that_we_matched.includes(value));
     users_with_no_iteraction = users_with_no_iteraction.filter(value => !users_that_we_hate.includes(value));
     // I want to remove myself from interaction
-    const index_of_myself = all_users.indexOf(my_id);
+    const index_of_myself = all_users.indexOf(id);
     if (index_of_myself > -1) {
         users_with_no_iteraction.splice(index_of_myself, 1); // 2nd parameter means remove one item only
     }
@@ -103,8 +103,24 @@ app.get('/no-interaction/:id', async (req, res) => {
 })
 
 async function processMessage(msg) {
-    console.log(msg.content.toString(), 'Call email API here');
-    // set last message to msg.content
+    console.log(JSON.parse(msg.content.toString()), 'Call email API here');
+    const message = JSON.parse(msg.content.toString());
+    // console.log(message, 'Call email API here');
+    console.log(message.type);
+    console.log(message.other_user);
+    if (message.type == 'match') {
+        const m = Match.build({
+            user_1: message.id,
+            user_2: message.other_user,
+        });
+        await m.save();
+    } else {
+        const h = Hate.build({
+            user_1: message.id,
+            user_2: message.other_user,
+        });
+        await h.save();
+    }
 }
 
 (async () => {
@@ -121,12 +137,8 @@ async function processMessage(msg) {
 
     await channel.assertQueue(queue, { durable: true });
     let consumerTag = await channel.consume(queue, async (msg) => {
-        console.log('processing messages');
-        console.log(msg.content.toString);
         await processMessage(msg);
-        console.log(msg.content.toJSON);
         await channel.ack(msg);
-        console.log(msg.content.toJSON);
     },
         {
             noAck: false,

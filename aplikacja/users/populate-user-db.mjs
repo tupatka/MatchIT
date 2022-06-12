@@ -43,6 +43,12 @@ const u6 = Users.build({
     age: 21,
     desc: "Elo mordeczki",
 });
+const u7 = Users.build({
+    id: 7,
+    name: "Jimmy Coder",
+    age: "22",
+    desc: "Let me fix bugs in your heart ;)"
+})
 
 await u1.save();
 await u2.save();
@@ -50,3 +56,4 @@ await u3.save();
 await u4.save();
 await u5.save();
 await u6.save();
+await u7.save();

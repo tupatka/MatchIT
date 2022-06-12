@@ -21,10 +21,10 @@ app.listen(port, () => {
 
 const getUsersDetails = async (users) => {
     var usersDetails = [];
-    for(const id of users){
+    for (const id of users) {
         await fetch(`http://users:7070/user-info/${id}`).
-        then(res => res.json()).
-        then(data => usersDetails.push(data));
+            then(res => res.json()).
+            then(data => usersDetails.push(data));
     }
     return usersDetails;
 }
@@ -34,7 +34,7 @@ app.get('/', async (req, res) => {
     await fetch(`http://relacje:5000/no-interaction/${myId}`).
         then(res => res.json()).
         then(data => getUsersDetails(data)).
-        then(data => res.render('main', {usersInfo: data})).
+        then(data => res.render('main', { usersInfo: data })).
         catch(err => {
             console.log(err);
             res.send("Brak użytkowników do wyświetlenia.");
@@ -44,18 +44,21 @@ app.get('/', async (req, res) => {
 app.get('/match', async (req, res) => {
     await fetch(`http://relacje:5000/match/${myId}`).
         then(res => res.json()).
-        then (data => getUsersDetails(data)).
-        then(data => res.render('match', {usersInfo: data})).
+        then(data => getUsersDetails(data)).
+        then(data => res.render('match', { usersInfo: data })).
         catch(err => {
             console.log(err);
             res.send('Niestety nie udało się znaleźć matchy...')
         });
 })
 
-app.get('/send_to_queue/:id', async (req, res) => {
+app.get('/send_to_queue/:id/:type', async (req, res) => {
+    console.log(req.params.id);
+    console.log(req.params.type);
     const connection = await amqplib.connect(amqpUrl, 'heartbeat=60');
     const channel = await connection.createChannel();
     const other_user_id = req.params.id;
+    const mess_type = req.params.type;
     try {
         console.log('Publishing');
         const exchange = 'user.relations';
@@ -66,7 +69,7 @@ app.get('/send_to_queue/:id', async (req, res) => {
         await channel.assertQueue(queue, { durable: true });
         await channel.bindQueue(queue, exchange, routingKey);
 
-        const msg = { 'id': myId, other_user: other_user_id, type: 'match' };
+        const msg = { id: myId, other_user: other_user_id, type: mess_type };
 
         await channel.publish(exchange, routingKey, Buffer.from(JSON.stringify(msg)));
         console.log('Message published');
@@ -80,5 +83,5 @@ app.get('/send_to_queue/:id', async (req, res) => {
     }
     // process.exit(0);
 
-    res.send('ok, wiadomosc wysłana');
+    res.redirect('/');
 });
