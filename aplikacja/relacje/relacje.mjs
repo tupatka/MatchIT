@@ -1,3 +1,5 @@
+import fetch from 'node-fetch';
+
 import amqplib from 'amqplib';
 const amqpUrl = process.env.AMQP_URL || 'amqp://rabbitmq:5672';
 
@@ -12,8 +14,8 @@ app.listen(port, () => {
 });
 
 const my_id = 1;
-const all_users = [1, 2, 3, 4, 5, 6];
-//^^ Users.mjs będzie dropować wszystkie id użytkownikóœ
+const all_users = await fetch(`http://users:7070/get-users-ids`).
+then(data => data.json());
 
 const get_user_1_ids = async (id) => {
     const map = await Match.findAll(

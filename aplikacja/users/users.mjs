@@ -3,6 +3,7 @@ import async from 'async';
 const app = express();
 
 import { sequelize, Users } from './user-database.mjs';
+import { forever } from 'async';
 
 const port = 7070;
 app.listen(port, () => {
@@ -19,4 +20,15 @@ app.get('/user-info/:id', async (req, res) => {
     else {
         res.send(await info());
     }
+})
+
+// prześlij listę wszystkich id użytkowników w bazie
+app.get('/get-users-ids', async (req, res) => {
+    var ids = [];
+    const getInfo = async () => await Users.findAll({raw: true});
+    const info = await getInfo();
+    info.forEach(user => {
+        ids.push(user.id);
+    });
+    res.send(ids);
 })

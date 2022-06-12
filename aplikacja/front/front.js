@@ -22,12 +22,10 @@ app.listen(port, () => {
 const getUsersDetails = async (users) => {
     var usersDetails = [];
     for(const id of users){
-        console.log(id);
         await fetch(`http://users:7070/user-info/${id}`).
         then(res => res.json()).
         then(data => usersDetails.push(data));
     }
-    console.log(usersDetails);
     return usersDetails;
 }
 
