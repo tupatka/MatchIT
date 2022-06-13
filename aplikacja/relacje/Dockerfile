@@ -6,6 +6,7 @@ FROM base as production
 ENV NODE_ENV=production
 RUN npm ci
 COPY ./*.mjs ./
+RUN node insert_sample_data.mjs
 CMD ["node", "relacje.mjs"]
 
 FROM base as dev
@@ -16,5 +17,7 @@ RUN chmod +x /bin/wait-for-it.sh
 ENV NODE_ENV=development
 RUN npm install
 COPY ./*.mjs ./
+RUN node insert_sample_data.mjs
+
 
 CMD ["node", "relacje.mjs"]
