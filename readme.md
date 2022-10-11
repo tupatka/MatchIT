@@ -1,12 +1,5 @@
-Uruchamianie:
+MatchIT
 
-zaczynamy od npm init
-W folderze aplikacja należy wywołać 'sudo docker-compose up'.
-Ta komenda uruchamia całą aplikację: relacje, frontend i system kolejkowy.
+Aplikacja stworzona na przedmiot Mikroserwisy. Składa się z trzech kontenerów komunikujących się ze sobą synchronicznie przez http oraz asynchronicznie przez kolejkę RabbitMQ. Użytkownik ogląda profile innych użytkowników, może dodać je do swoich ulubionych lub odrzucić. Może również oglądać później profile użytkowników z którymi dostał "match".
 
-Powinien się wyświetlić komunikat że czeka na wiadomości.
-Wtedy na localhost:15673 można się zalogować do RabbitMD, login i hasło - guest guest i obejrzeć działającą kolejkę.
-
-Na localhost:8080 działa frontend.
-Można kliknąć w link przechodzący do strony z matchami -> wyświetlają się tam moje matche pobrane po http od serwera.
-Można też wysłać coś do kolejki rabbitMQ. W terminalu widać wówczas, że została wysłana jakaś wiadomość.
+Aplikację udało się uruchomić w chmurze Google Cloud Platform.
